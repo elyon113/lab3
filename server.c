@@ -23,7 +23,7 @@ void *sendfile(void *arg)
         if (fin) {
         	fseek(fin, 0, SEEK_END);
                 filesize = ftell(fin);
-                snprintf(answer, SIZE, "file size is %d B, do you want to continue? [y/n] ", filesize);
+                snprintf(answer, SIZE, "file size is %ld B, do you want to continue? [y/n] ", filesize);
         }
         else {
         	strcpy(answer, "error: no such file\n");
