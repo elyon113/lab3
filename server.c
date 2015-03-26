@@ -1,14 +1,19 @@
-#include <sys/types.h>
+//#include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <unistd.h>
 #include <pthread.h>
 #include <string.h>
 #include <stdio.h>
-#include <pthread.h>
+//#include <pthread.h>
 
 #include "const.h"
-
+#ifdef USE_PTHREAD
+#include <pthread.h>
+#else
+#include <sys/types.h>
+#include <sys/wait.h>
+#endif
 void *sendfile(void *arg)
 {
 	long int filesize = 0;
@@ -56,7 +61,11 @@ int main()
 	int sock,listener;
 	struct sockaddr_in addr;
 	int addrlen;
+	#ifdef USE_PTHREAD
 	pthread_t thrd;
+	#else
+	pid_t fork_ret;
+	#endif
 
 	listener = socket(AF_INET, SOCK_STREAM, 0);
 
@@ -69,8 +78,11 @@ int main()
 
 	while (1) {
 		sock = accept(listener, 0, 0);
-		if (sock)
-			pthread_create(&thrd, NULL, sendfile, &sock);
+		if (sock){
+			
+
+		}
+			//pthread_create(&thrd, NULL, sendfile, &sock);
 	}
 	return 0;
 }
