@@ -79,7 +79,25 @@ int main()
 	while (1) {
 		sock = accept(listener, 0, 0);
 		if (sock){
-			
+			#ifdef USE_PTHREAD
+		printf("client connected, using pthread to handle...\n");
+		pthread_create(&thread, NULL, sendfile, (void*)&sock);
+		#else
+		printf("client connected, using fork to handle...\n");
+		fork_ret = fork();
+		if(fork_ret < 0) {
+			printf("fork failed\n");
+			return 1;
+		}
+
+		if(fork_ret == 0) {       // child process
+			close(listener);
+			sendfile((void*)&sock);
+			break;
+		} else
+			// parent process
+			close(sock);
+#endif
 
 		}
 			//pthread_create(&thrd, NULL, sendfile, &sock);
