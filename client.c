@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
 
 	send(sock, argv[2], strlen(argv[2])+1, 0);
 	recv(sock, answer, SIZE, 0);
-	printf(answer);
+	printf("%s", answer);
 	answer[5]='\0';
 	if (!strcmp(answer, "error")) {
 		close(sock);
